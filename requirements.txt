@@ -1,6 +1,4 @@
 
 # требуемые пакеты
-pip/brew install pygame
-pip/brew install shelve
-pip/brew install os # установлен автоматически 
-pip/brew install random # установлен автоматически 
+pickleDB==0.9.2
+sqlitedict==1.7.0
