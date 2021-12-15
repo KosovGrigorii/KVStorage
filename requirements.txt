@@ -1,0 +1,6 @@
+
+# требуемые пакеты
+pip/brew install pygame
+pip/brew install shelve
+pip/brew install os # установлен автоматически 
+pip/brew install random # установлен автоматически 
