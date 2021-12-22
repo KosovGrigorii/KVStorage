@@ -1,5 +1,7 @@
-
+import hashlib
 import json
+import shutil
+import os
 
 from TableElement import TableElement
 from TableElementEncoder import TableElementEncoder
@@ -18,10 +20,8 @@ class HashTable:
         self.element_encoder = TableElementEncoder()
 
     def get_hash(self, key):
-        fin_hash = 0
-        for char in key:
-            fin_hash += ord(char)
-        return fin_hash
+        h = hashlib.sha1(key.encode())
+        return int(h.hexdigest(), 16)
 
     def find_empty_entry(self):
         with open(self.filename, 'r') as data_file:
@@ -48,6 +48,16 @@ class HashTable:
         key_hash = self.get_hash(key)
         bucket_position = key_hash % self.capacity
 
+        parsed_value = value.split('/')
+        script_dir = os.path.dirname(__file__)
+        rel_path = f"Storage/{parsed_value[len(parsed_value) - 1]}"
+        abs_file_path = os.path.join(script_dir, rel_path)
+
+
+        with open(abs_file_path, 'w') as file_to:
+            with open(value, 'r') as file_from:
+                shutil.copyfileobj(file_from, file_to, 1024)
+
         with open(self.filename, 'r') as data_file:
             data = json.load(data_file)
             with open(data[0], 'r+') as bucket_file:
@@ -64,7 +74,7 @@ class HashTable:
 
                     while True:
                         if entries[entries_position]['key'] == key:
-                            entries[entries_position]['value'] = value
+                            entries[entries_position]['value'] = abs_file_path
                             break
 
                         elif entries[entries_position]['next'] is not None:
@@ -73,11 +83,11 @@ class HashTable:
 
                         else:
                             entries[entries_position]['next'] = index
-                            entries[index] = self.element_encoder.default(TableElement(key_hash, key, value))
+                            entries[index] = self.element_encoder.default(TableElement(key_hash, key, abs_file_path))
                             break
 
                 else:
-                    entries[entries_position] = self.element_encoder.default(TableElement(key_hash, key, value))
+                    entries[entries_position] = self.element_encoder.default(TableElement(key_hash, key, abs_file_path))
 
             with open(data[0], 'w') as bucket_file:
                 json.dump(buckets, bucket_file)

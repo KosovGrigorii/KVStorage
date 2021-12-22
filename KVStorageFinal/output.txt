@@ -1,1 +1,1 @@
-["buckets.txt", "values.txt", 8]
+["buckets.txt", "values.txt", 4]

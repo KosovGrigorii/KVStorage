@@ -36,10 +36,10 @@ def execute_command(command_components):
             parsed_value = value.split('/')
             print(f"Pair {key}: {parsed_value[len(parsed_value) - 1]} is added to the storage")
 
-        except:
+        except Exception as e:
             print("Incorrect format. Check format by typing help or h")
 
-    elif command.startswith("put"):
+    elif command.startswith("clear"):
         print("You sure you want to clear your storage?\nPress A for yes, anything else for no")
         answer = input()
         if answer.lower()  == "a":
