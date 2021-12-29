@@ -25,7 +25,8 @@ def execute_command(command_components):
     if command.startswith("get"):
         key = command.split(' ')[1]
         storage = HashTable("output.txt")
-        storage.get(key)
+        value = storage.get(key)
+        print(value)
 
     elif command.startswith("put"):
         try:
